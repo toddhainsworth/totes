@@ -1,14 +1,9 @@
 local M = {}
 
--- Strip alias from [[Note Name|Alias]] syntax, returning just the link target.
-local function strip_alias(link)
-  return (link:match("^(.-)%|") or link):match("^%[*(.-)%]*$") or link
-end
-
--- Normalize a WikiLink string: strip [[ ]] brackets and alias, lowercase.
+-- Normalize a WikiLink string: strip [[ ]] brackets, alias, and lowercase.
 local function normalize(link)
   local s = link:gsub("^%[%[", ""):gsub("%]%]$", "")
-  s = strip_alias(s)
+  s = s:match("^(.-)%|") or s
   return s:lower()
 end
 
