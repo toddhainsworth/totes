@@ -43,24 +43,25 @@ Search is limited to filenames and note `title` frontmatter fields only. No full
 Leader key: `<Space>`. Set explicitly in the totes config; the user's personal leader is irrelevant since totes ignores the user's config.
 
 - `<leader>n` — create new Note (prompts for title, lands in `inbox/`)
-- `<leader>p` — promote current Inbox Note to `notes/` (with confirmation)
-- `<leader>f` — fuzzy find notes by filename/title
-- `<leader>ft` — filter by tag, then list matching notes
+- `<leader>d` — open today's Daily Note in `daily/` (creates it if it doesn't exist, filename: `YYYY-MM-DD.md`)
+- `<leader>p` — promote current Inbox Note to `notes/`. Opens a single `nui.nvim` popup: heading shows the target path, optional PARA tag input with live autocomplete hints (sourced from existing vault tags, Tab accepts top suggestion), Enter confirms and promotes (tag is optional). Blocked on Daily Notes — shows a notice directing the user to `<leader>n` instead
+- `<leader>ff` — fuzzy find notes by filename/title
+- `<leader>ft` — filter by tag, then list matching notes. Supports prefix matching for hierarchical tags (e.g. `project/` returns all notes under any project)
 - `<leader>b` — show backlinks (Telescope picker, greps vault for `[[Current Note Name]]`)
 - `gf` — follow WikiLink under cursor (broken link offers to create; ambiguous opens picker)
+- `<leader>a` — archive current note. Opens a `nui.nvim` yes/no confirmation menu (arrow keys or Enter/Escape). On confirm, embeds the original full PARA tag under `archive/` (e.g. `project/totes` → `archive/project/totes`). If the note has no PARA tag, falls back to `archive/<filename-stem>`. Blocked on Daily Notes — shows a notice and does nothing.
 - `<C-o>` — navigate back (standard Vim jumplist)
 
 ## Plugin philosophy
 
-Lean on existing NeoVim plugins for commodity features (markdown rendering, file tree, splash screen, plugin management). Only write custom Lua for behaviour that has no suitable existing plugin — specifically the `:Totes` command and WikiLink navigation. `obsidian.nvim` is explicitly excluded: too heavy and couples the tool to the Obsidian ecosystem.
+Lean on existing NeoVim plugins for commodity features (markdown rendering, splash screen, plugin management). Only write custom Lua for behaviour that has no suitable existing plugin — specifically the `:Totes` command and WikiLink navigation. `obsidian.nvim` is explicitly excluded: too heavy and couples the tool to the Obsidian ecosystem. `neo-tree.nvim` is excluded — navigation is Telescope-first and a file tree adds weight without supporting any designed workflow.
 
 Confirmed plugin selections:
 - `lazy.nvim` — plugin manager
 - `telescope.nvim` — fuzzy finder, WikiLink disambiguation, backlinks
 - `render-markdown.nvim` — markdown rendering
-- `neo-tree.nvim` — file tree
 - `nui.nvim` — custom UI components (used by `:Totes` command)
-- `alpha-nvim` — splash screen with ASCII logo and random tagline from a fixed list:
+- `alpha-nvim` — splash screen with ASCII logo, random tagline from a fixed list, and a live inbox note count (e.g. "3 notes waiting in inbox"):
   - "Notes, by Todd"
   - "Lemme write that down"
   - "Yet another note tool?"
@@ -71,8 +72,8 @@ Confirmed plugin selections:
 The single, fixed directory on the user's filesystem where all notes are stored. There is exactly one Vault per user installation — no multi-vault support. Default location: `~/totes/`.
 
 - Avoid: "workspace", "notebook", "library", "directory"
-- Fixed top-level structure: `inbox/` (fleeting/unrefined), `notes/` (permanent), `assets/` (non-markdown files)
-- Cross-cutting organisation is handled by frontmatter tags, not folders
+- Fixed top-level structure: `inbox/` (fleeting/unrefined), `notes/` (permanent), `daily/` (date-stamped daily notes, not expected to be promoted), `assets/` (non-markdown files)
+- Cross-cutting organisation follows the PARA method (Projects, Areas, Resources, Archive) via frontmatter tags, not folders. Tag convention: `project/totes`, `area/health`, `resource/neovim` — two-level, hierarchical, kebab-case. Archive tags are three-level: `archive/project/totes`, `archive/area/health` — the original full tag is preserved under `archive/` to avoid collisions between same-named items in different PARA categories
 - Automatically git-initialised on first `totes` launch. Notes are auto-committed on save, asynchronously (non-blocking). No remote. History is local-only.
 
 ### `:Totes` command
@@ -84,7 +85,7 @@ Custom NeoVim command for managing the totes tool. Built with `nui.nvim`.
 - Version selection (downgrade) is explicitly out of scope
 
 ### Note
-A markdown file in the Vault. Has three required frontmatter fields, all auto-populated on creation: `title` (human-readable name), `tags` (list of strings), `created` (ISO timestamp). No `id` or `modified` field. New Notes always land in `inbox/`. A dedicated command promotes an `inbox/` Note to `notes/`. Filenames are kebab-case derived from the title (e.g. "My Thoughts on Rust" → `my-thoughts-on-rust.md`).
+A markdown file in the Vault. Has three required frontmatter fields, all auto-populated on creation: `title` (human-readable name), `tags` (list of strings), `created` (ISO timestamp). No `id` or `modified` field. Notes created via `<leader>n` always land in `inbox/`. Daily Notes (created via `<leader>d`) land in `daily/` and are a distinct type. Filenames are kebab-case derived from the title (e.g. "My Thoughts on Rust" → `my-thoughts-on-rust.md`).
 
 - Avoid: "document", "file", "page", "entry"
 
@@ -95,6 +96,11 @@ A Note in `inbox/` — fleeting, unrefined, not yet processed. Promoted to `note
 A Note in `notes/` — processed and refined. Promoted from an Inbox Note via explicit command with confirmation.
 
 - Avoid: "processed note", "final note"
+
+### Daily Note
+A date-stamped note in `daily/` opened via `<leader>d`. One file per calendar day (`YYYY-MM-DD.md`). Intended as an ephemeral junk drawer — not expected to be promoted. If something in a Daily Note is worth keeping, the workflow is: `<leader>n` to create a new Inbox Note, paste the relevant section, then promote or archive from there. Both `<leader>p` (promote) and `<leader>a` (archive) are blocked on Daily Notes — they show a notice and do nothing.
+
+- Avoid: "journal", "log", "diary"
 
 ### WikiLink
 A link between notes written as `[[Note Name]]` or `[[Note Name|Alias]]`. Resolved by case-insensitive filename match across the entire Vault. Zero matches = offer to create the Note in `inbox/`. Multiple matches = Telescope picker. Alias syntax supported.
