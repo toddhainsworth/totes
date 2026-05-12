@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+export XDG_DATA_HOME="$HOME/.local/share/totes"
+export XDG_STATE_HOME="$HOME/.local/state/totes"
+exec nvim -u "$HOME/.local/share/totes/init.lua" "$HOME/totes/"

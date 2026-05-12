@@ -15,7 +15,7 @@ A single-purpose launcher — no arguments, no subcommands. Invokes NeoVim with 
 nvim -u ~/.local/share/totes/init.lua ~/totes/
 ```
 
-Plugin data isolated to `~/.local/share/totes/` (not the user's `~/.local/share/nvim/`). All management operations are handled by `:Totes` inside NeoVim.
+Plugin data isolated to `~/.local/share/totes/` (not the user's `~/.local/share/nvim/`). Isolation is achieved by setting `XDG_DATA_HOME=~/.local/share/totes` before launch, which causes NeoVim's `stdpath('data')` to resolve to `~/.local/share/totes/nvim/`. All management operations are handled by `:Totes` inside NeoVim.
 
 ## NeoVim version requirement
 
@@ -24,6 +24,11 @@ Minimum: NeoVim 0.10+. Required for `vim.system()` (async git) and `render-markd
 ## Installation
 
 The totes tool installs to `~/.local/share/totes/`. An install script (in this repo) clones the repo there and adds the `totes` binary to `$PATH`. The `:Totes update` command knows to run `git fetch`/`git checkout` at that fixed location. Homebrew packaging is out of scope for now.
+
+Directory layout at `~/.local/share/totes/` after first launch:
+- `bin/`, `init.lua`, `lua/` — source files from the git clone
+- `nvim/` — runtime data written by NeoVim (lazy.nvim plugins, state); git-ignored
+- `lazy-lock.json` — lazy.nvim lock file; git-ignored (churns on every `:Totes update`)
 
 ## Two-repo model
 

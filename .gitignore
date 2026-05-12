@@ -1,0 +1,4 @@
+# nvim runtime data written by lazy.nvim and nvim itself (present when installed to ~/.local/share/totes/)
+nvim/
+lazy-lock.json
+*.log
