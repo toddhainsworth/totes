@@ -18,6 +18,8 @@ function M.init()
   if vim.fn.isdirectory(vault .. "/.git") == 0 then
     vim.fn.system({ "git", "-C", vault, "init" })
   end
+
+  vim.fn.chdir(vault)
 end
 
 M.root = vault
