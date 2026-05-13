@@ -2,8 +2,8 @@ local M = {}
 local note_factory = require("totes.note_factory")
 local vault = require("totes.vault")
 
-function M.create_inbox_note()
-  vim.ui.input({ prompt = "Note title: " }, function(title)
+function M.create_inbox_note(default_title)
+  vim.ui.input({ prompt = "Note title: ", default = default_title or "" }, function(title)
     if not title or title == "" then return end
 
     local note = note_factory.create(title, {})
