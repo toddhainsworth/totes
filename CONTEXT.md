@@ -56,6 +56,7 @@ Leader key: `<Space>`. Set explicitly in the totes config; the user's personal l
 - `gf` — follow WikiLink under cursor (broken link offers to create; ambiguous opens picker)
 - `<leader>a` — archive current note. Opens a `nui.nvim` yes/no confirmation menu (arrow keys or Enter/Escape). On confirm, embeds the original full PARA tag under `archive/` (e.g. `project/totes` → `archive/project/totes`). If the note has no PARA tag, falls back to `archive/<filename-stem>`. Blocked on Daily Notes — shows a notice and does nothing.
 - `<C-o>` — navigate back (standard Vim jumplist)
+- `jj` (insert) — exit insert mode (mapped to `<Esc>`)
 
 ## Plugin philosophy
 

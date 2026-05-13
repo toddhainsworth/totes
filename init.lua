@@ -5,6 +5,8 @@ end
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+vim.keymap.set("i", "jj", "<Esc>", { desc = "Exit insert mode" })
+
 local totes_root = vim.fn.expand("~/.local/share/totes")
 
 -- Bootstrap lazy.nvim into the totes data dir (isolated from ~/.local/share/nvim)
