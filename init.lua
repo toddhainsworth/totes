@@ -37,6 +37,10 @@ require("lazy").setup({
     dependencies = { "nvim-treesitter/nvim-treesitter" },
     opts = {
       anti_conceal = { enabled = false },
+      checkbox = {
+        checked = { icon = "✔" },
+        unchecked = { icon = "○" },
+      },
     },
   },
   { "MunifTanjim/nui.nvim" },
@@ -58,3 +62,21 @@ require("totes.wikilink_nav").setup()
 require("totes.promotion").setup()
 require("totes.archive").setup()
 require("totes.tasks").setup()
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "markdown",
+  callback = function()
+    vim.keymap.set("n", "<leader>x", function()
+      local line = vim.api.nvim_get_current_line()
+      local new_line
+      if line:match("%- %[x%]") then
+        new_line = line:gsub("%- %[x%]", "- [ ]", 1)
+      elseif line:match("%- %[ %]") then
+        new_line = line:gsub("%- %[ %]", "- [x]", 1)
+      end
+      if new_line then
+        vim.api.nvim_set_current_line(new_line)
+      end
+    end, { desc = "Toggle checkbox", buffer = true })
+  end,
+})
