@@ -41,3 +41,4 @@ require("lazy").setup({
 })
 
 require("totes.vault").init()
+require("totes.splash").setup()
