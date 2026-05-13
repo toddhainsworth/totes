@@ -46,6 +46,13 @@ Leader key is `\`.
 | `<leader>p` | Promote the current Inbox Note to `notes/` |
 | `<leader>a` | Archive the current Permanent Note |
 
+### Tasks
+
+| Key | Action |
+|-----|--------|
+| `<leader>t` | Add a Task to the Task Note (prompts for task text) |
+| `<leader>T` | Open the Task Note (`notes/tasks.md`) |
+
 ### Navigation
 
 | Key | Action |
@@ -79,13 +86,19 @@ created: 2026-05-13T09:00:00Z
 
 Tags follow a two-level hierarchical kebab-case convention: `project/totes`, `area/health`, `resource/neovim`. Archive tags extend to three levels: `archive/project/totes`. A note with no tags has `tags: []`.
 
+## Tasks
+
+Tasks live in a single Task Note at `notes/tasks.md`. Each task is appended as a Markdown list item when you use `<leader>t`. You can embed `[[WikiLinks]]` in task text to link tasks to related notes.
+
+The Task Note is created automatically the first time you add a task or open it with `<leader>T`. It cannot be promoted or archived.
+
 ## How promotion and archiving work
 
 **Promoting** (`<leader>p`) moves a note from `inbox/` to `notes/`. A popup lets you optionally assign a PARA tag (e.g. `project/totes`, `area/health`). Press `Tab` to accept the autocomplete suggestion, `Enter` to promote without a tag.
 
 **Archiving** (`<leader>a`) transforms the note's PARA tag in-place, prefixing it with `archive/` (e.g. `project/totes` → `archive/project/totes`), then asks for confirmation before writing. The note stays in `notes/` — the tag change is the archive signal.
 
-Daily Notes cannot be promoted or archived.
+Daily Notes and the Task Note cannot be promoted or archived.
 
 ## Notes are auto-committed
 

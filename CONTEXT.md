@@ -45,7 +45,7 @@ Search is limited to filenames and note `title` frontmatter fields only. No full
 
 ## Keybindings
 
-Leader key: `<Space>`. Set explicitly in the totes config; the user's personal leader is irrelevant since totes ignores the user's config.
+Leader key: `\` (backslash). Set explicitly in the totes config; the user's personal leader is irrelevant since totes ignores the user's config.
 
 - `<leader>n` — create new Note (prompts for title, lands in `inbox/`)
 - `<leader>d` — open today's Daily Note in `daily/` (creates it if it doesn't exist, filename: `YYYY-MM-DD.md`)
@@ -55,6 +55,8 @@ Leader key: `<Space>`. Set explicitly in the totes config; the user's personal l
 - `<leader>b` — show backlinks (Telescope picker, greps vault for `[[Current Note Name]]`)
 - `gf` — follow WikiLink under cursor (broken link offers to create; ambiguous opens picker)
 - `<leader>a` — archive current note. Opens a `nui.nvim` yes/no confirmation menu (arrow keys or Enter/Escape). On confirm, embeds the original full PARA tag under `archive/` (e.g. `project/totes` → `archive/project/totes`). If the note has no PARA tag, falls back to `archive/<filename-stem>`. Blocked on Daily Notes — shows a notice and does nothing.
+- `<leader>t` — add a Task (prompts for text via `nui.nvim`, appends `- [ ] <text>` to the Task Note)
+- `<leader>T` — open the Task Note (`notes/tasks.md`)
 - `<C-o>` — navigate back (standard Vim jumplist)
 - `jj` (insert) — exit insert mode (mapped to `<Esc>`)
 
@@ -112,3 +114,11 @@ A date-stamped note in `daily/` opened via `<leader>d`. One file per calendar da
 A link between notes written as `[[Note Name]]` or `[[Note Name|Alias]]`. Resolved by case-insensitive filename match across the entire Vault. Zero matches = offer to create the Note in `inbox/`. Multiple matches = Telescope picker. Alias syntax supported.
 
 - Avoid: "internal link", "note link"
+
+### Task
+A markdown checkbox line (`- [ ] <text>`) stored in the Task Note. Tasks are plain text — no special frontmatter, no dedicated file per task. The user is responsible for embedding any relevant context (e.g. a WikiLink) directly in the task text. Tasks are added from any Note via `<leader>t` and collected in a single global Task Note.
+
+- Avoid: "to-do", "action item", "checklist item"
+
+### Task Note
+A single, fixed Permanent Note at `notes/tasks.md` that collects all Tasks. Created automatically on first `<leader>t` if it does not exist. Not promotable, not archivable (special-cased like Daily Notes). Opened directly via `<leader>T`.

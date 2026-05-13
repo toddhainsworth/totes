@@ -103,10 +103,6 @@ local function perform_promotion(filepath, dest, tag)
 end
 
 function M.promote()
-  local vault = require("totes.vault")
-  local tag_scanner = require("totes.tag_scanner")
-  local Input = require("nui.input")
-
   local filepath = vim.fn.expand("%:p")
 
   if M.is_daily(filepath) then
@@ -116,6 +112,16 @@ function M.promote()
     )
     return
   end
+
+  local tasks = require("totes.tasks")
+  if tasks.is_task_note(filepath) then
+    vim.notify("Task Note cannot be promoted.", vim.log.levels.INFO)
+    return
+  end
+
+  local vault = require("totes.vault")
+  local tag_scanner = require("totes.tag_scanner")
+  local Input = require("nui.input")
 
   local filename = vim.fn.fnamemodify(filepath, ":t")
   local dest = vault.root .. "/notes/" .. filename
