@@ -2,8 +2,8 @@ if vim.fn.has("nvim-0.10") == 0 then
   vim.notify("totes requires NeoVim 0.10+. Some features may not work.", vim.log.levels.WARN)
 end
 
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
+vim.g.mapleader = "\\"
+vim.g.maplocalleader = "\\"
 
 vim.keymap.set("i", "jj", "<Esc>", { desc = "Exit insert mode" })
 

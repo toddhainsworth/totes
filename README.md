@@ -35,7 +35,7 @@ On first launch, totes creates the Vault structure and initialises a local git r
 
 ## Keybindings
 
-Leader key is `<Space>`.
+Leader key is `\`.
 
 ### Notes
 

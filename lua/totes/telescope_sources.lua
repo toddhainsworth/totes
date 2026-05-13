@@ -1,5 +1,11 @@
 local M = {}
 
+local function add_nav_mappings(map)
+  local actions = require("telescope.actions")
+  map("i", "<C-j>", actions.move_selection_next)
+  map("i", "<C-k>", actions.move_selection_previous)
+end
+
 function M.tag_matches(tag, prefix)
   if prefix == "" then return true end
   local bare = prefix:match("^(.*)/+$") or prefix
@@ -41,7 +47,8 @@ function M.find_notes()
       entry_maker = function(e) return e end,
     }),
     sorter = conf.generic_sorter({}),
-    attach_mappings = function(buf, _)
+    attach_mappings = function(buf, map)
+      add_nav_mappings(map)
       actions.select_default:replace(function()
         actions.close(buf)
         local sel = action_state.get_selected_entry()
@@ -66,6 +73,10 @@ function M.open_notes_for_tag(prefix)
     prompt_title = "Notes tagged: " .. prefix,
     finder = finders.new_table({ results = matching }),
     sorter = conf.generic_sorter({}),
+    attach_mappings = function(_, map)
+      add_nav_mappings(map)
+      return true
+    end,
   }):find()
 end
 
@@ -84,7 +95,8 @@ function M.filter_by_tag()
     prompt_title = "Filter by Tag",
     finder = finders.new_table({ results = tags }),
     sorter = conf.generic_sorter({}),
-    attach_mappings = function(buf, _)
+    attach_mappings = function(buf, map)
+      add_nav_mappings(map)
       actions.select_default:replace(function()
         actions.close(buf)
         local selected = action_state.get_selected_entry()
@@ -103,6 +115,10 @@ function M.backlinks()
     search = "[[" .. stem .. "]]",
     cwd = vault.root,
     use_regex = false,
+    attach_mappings = function(_, map)
+      add_nav_mappings(map)
+      return true
+    end,
   })
 end
 

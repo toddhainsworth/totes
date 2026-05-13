@@ -111,7 +111,7 @@ function M.promote()
 
   if M.is_daily(filepath) then
     vim.notify(
-      "Daily Notes cannot be promoted. Use <leader>n to create a new note.",
+      "Daily Notes cannot be promoted. Use \\n to create a new note.",
       vim.log.levels.INFO
     )
     return
