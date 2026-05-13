@@ -5,6 +5,9 @@ end
 vim.g.mapleader = "\\"
 vim.g.maplocalleader = "\\"
 
+vim.opt.number = true
+vim.opt.relativenumber = true
+
 vim.keymap.set("i", "jj", "<Esc>", { desc = "Exit insert mode" })
 
 local totes_root = vim.fn.expand("~/.local/share/totes")
