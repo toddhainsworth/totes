@@ -72,6 +72,21 @@ Write links as `[[Note Name]]` or `[[Note Name|Alias]]`. Following a link:
 | `:Totes changelog` | View the changelog |
 | `:Totes update` | Fetch and apply the latest version (prompts to restart) |
 
+## Note frontmatter
+
+Every note has three auto-populated frontmatter fields:
+
+```yaml
+---
+title: Totes Plugin Architecture
+tags:
+  - project/totes
+created: 2026-05-13T09:00:00Z
+---
+```
+
+Tags follow a two-level hierarchical kebab-case convention: `project/totes`, `area/health`, `resource/neovim`. Archive tags extend to three levels: `archive/project/totes`. A note with no tags has `tags: []`.
+
 ## How promotion and archiving work
 
 **Promoting** (`<leader>p`) moves a note from `inbox/` to `notes/`. A popup lets you optionally assign a PARA tag (e.g. `project/totes`, `area/health`). Press `Tab` to accept the autocomplete suggestion, `Enter` to promote without a tag.

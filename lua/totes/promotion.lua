@@ -1,6 +1,6 @@
 local M = {}
 
-local PROMPT = "> "
+local PROMPT = "tag: "
 
 function M.is_daily(filepath)
   return filepath:find("/daily/", 1, true) ~= nil
@@ -128,7 +128,7 @@ function M.promote()
     size = { width = 60 },
     border = {
       style = "rounded",
-      text = { top = " Promote → notes/" .. filename .. " ", top_align = "center" },
+      text = { top = " Add tag (Enter to skip) ", top_align = "center" },
     },
   }, {
     prompt = PROMPT,
