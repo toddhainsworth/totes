@@ -33,7 +33,7 @@ require("lazy").setup({
     opts = {},
   },
   { "MunifTanjim/nui.nvim" },
-  { "goolord/alpha-nvim", opts = {} },
+  { "goolord/alpha-nvim" },
 }, {
   root = vim.fn.stdpath("data") .. "/lazy",
 })
