@@ -5,9 +5,7 @@ end
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
--- Make lua/totes/* resolvable via require()
 local totes_root = vim.fn.expand("~/.local/share/totes")
-vim.opt.rtp:prepend(totes_root)
 
 -- Bootstrap lazy.nvim into the totes data dir (isolated from ~/.local/share/nvim)
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -39,6 +37,9 @@ require("lazy").setup({
 }, {
   root = vim.fn.stdpath("data") .. "/lazy",
 })
+
+-- lazy.nvim resets rtp on setup; re-add totes_root so require("totes.*") resolves
+vim.opt.rtp:prepend(totes_root)
 
 require("totes.vault").init()
 require("totes.splash").setup()
