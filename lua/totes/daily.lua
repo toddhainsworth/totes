@@ -24,7 +24,7 @@ function M.open()
     vim.notify("totes: could not create " .. daily_path, vim.log.levels.ERROR)
     return
   end
-  file:write(note_factory.frontmatter(date, {}))
+  file:write(note_factory.frontmatter(date, { "daily" }) .. "# " .. date .. "\n")
   file:close()
   vim.cmd("edit " .. vim.fn.fnameescape(daily_path))
 end
