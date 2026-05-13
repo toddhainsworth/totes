@@ -83,11 +83,6 @@ function M.write_archive_tag(content, archive_tag)
 end
 
 function M.archive()
-  local promotion = require("totes.promotion")
-  local para_transformer = require("totes.para_transformer")
-  local Menu = require("nui.menu")
-  local event = require("nui.utils.autocmd").event
-
   local filepath = vim.fn.expand("%:p")
 
   if filepath == "" then
@@ -95,10 +90,21 @@ function M.archive()
     return
   end
 
+  local promotion = require("totes.promotion")
   if promotion.is_daily(filepath) then
     vim.notify("Daily Notes cannot be archived.", vim.log.levels.INFO)
     return
   end
+
+  local tasks = require("totes.tasks")
+  if tasks.is_task_note(filepath) then
+    vim.notify("Task Note cannot be archived.", vim.log.levels.INFO)
+    return
+  end
+
+  local para_transformer = require("totes.para_transformer")
+  local Menu = require("nui.menu")
+  local event = require("nui.utils.autocmd").event
 
   local f = io.open(filepath, "r")
   if not f then

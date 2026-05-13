@@ -1,4 +1,30 @@
+local FAKE_ROOT = "/tmp/totes-promotion-test"
+package.loaded["totes.vault"] = { root = FAKE_ROOT }
+
+-- Stub vim in _G so required modules (promotion, tasks) can access it at call time
+_G.vim = _G.vim or {}
+_G.vim.fn = _G.vim.fn or { expand = function(p) return p end }
+_G.vim.log = _G.vim.log or { levels = { INFO = 2, WARN = 3, ERROR = 4 } }
+_G.vim.notify = _G.vim.notify or function() end
+
 local promotion = require("totes.promotion")
+
+describe("promotion.promote Task Note guard", function()
+  local notified
+
+  before_each(function()
+    notified = nil
+    _G.vim.notify = function(msg) notified = msg end
+    -- Reload tasks so it binds to the fake vault root set above
+    package.loaded["totes.tasks"] = nil
+    _G.vim.fn.expand = function() return FAKE_ROOT .. "/notes/tasks.md" end
+  end)
+
+  it("returns early with a notice when the current file is the Task Note", function()
+    promotion.promote()
+    assert.truthy(notified and notified:find("Task Note"))
+  end)
+end)
 
 describe("promotion.is_daily", function()
   it("returns true for a path inside daily/", function()
