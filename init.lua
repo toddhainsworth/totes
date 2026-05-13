@@ -32,7 +32,9 @@ require("lazy").setup({
   {
     "MeanderingProgrammer/render-markdown.nvim",
     dependencies = { "nvim-treesitter/nvim-treesitter" },
-    opts = {},
+    opts = {
+      anti_conceal = { enabled = false },
+    },
   },
   { "MunifTanjim/nui.nvim" },
   { "goolord/alpha-nvim" },
