@@ -20,4 +20,6 @@ function M.init()
   end
 end
 
+M.root = vault
+
 return M
