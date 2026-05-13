@@ -45,7 +45,6 @@ vim.opt.rtp:prepend(totes_root)
 
 require("totes.vault").init()
 require("totes.splash").setup()
-require("totes.command").setup()
 require("totes.autogit").setup()
 require("totes.notes").setup()
 require("totes.daily").setup()

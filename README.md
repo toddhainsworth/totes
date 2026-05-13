@@ -64,14 +64,6 @@ Write links as `[[Note Name]]` or `[[Note Name|Alias]]`. Following a link:
 - **Multiple matches** — opens a Telescope picker
 - **No match** — offers to create the note in `inbox/`
 
-## Commands
-
-| Command | Action |
-|---------|--------|
-| `:Totes` | View the changelog |
-| `:Totes changelog` | View the changelog |
-| `:Totes update` | Fetch and apply the latest version (prompts to restart) |
-
 ## Note frontmatter
 
 Every note has three auto-populated frontmatter fields:
