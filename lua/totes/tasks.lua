@@ -2,7 +2,7 @@ local M = {}
 
 local TASK_NOTE_REL = "notes/tasks.md"
 
-local function task_note_path()
+function M.path()
   local vault = require("totes.vault")
   return vault.root .. "/" .. TASK_NOTE_REL
 end
@@ -13,11 +13,11 @@ local function build_frontmatter()
 end
 
 function M.is_task_note(filepath)
-  return filepath == task_note_path()
+  return filepath == M.path()
 end
 
 function M.append(text)
-  local path = task_note_path()
+  local path = M.path()
 
   local exists = io.open(path, "r")
   if not exists then
@@ -42,7 +42,7 @@ function M.append(text)
 end
 
 function M.open()
-  vim.cmd("edit " .. vim.fn.fnameescape(task_note_path()))
+  vim.cmd("edit " .. vim.fn.fnameescape(M.path()))
 end
 
 function M.add()

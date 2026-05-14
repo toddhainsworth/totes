@@ -69,7 +69,7 @@ Confirmed plugin selections:
 - `telescope.nvim` — fuzzy finder, WikiLink disambiguation, backlinks
 - `render-markdown.nvim` — markdown rendering
 - `nui.nvim` — custom UI components (used by `:Totes` command)
-- `alpha-nvim` — splash screen with ASCII logo, random tagline from a fixed list, and a live inbox note count (e.g. "3 notes waiting in inbox"):
+- `alpha-nvim` — splash screen with ASCII logo, random tagline from a fixed list, a live inbox note count (e.g. "3 unprocessed in inbox"), and a live open-task count derived from `- [ ]` lines in the Task Note (e.g. "5 open tasks"):
   - "Notes, by Todd"
   - "Lemme write that down"
   - "Yet another note tool?"
