@@ -62,13 +62,14 @@ Leader key: `\` (backslash). Set explicitly in the totes config; the user's pers
 
 ## Plugin philosophy
 
-Lean on existing NeoVim plugins for commodity features (markdown rendering, splash screen, plugin management). Only write custom Lua for behaviour that has no suitable existing plugin — specifically the `:Totes` command and WikiLink navigation. `obsidian.nvim` is explicitly excluded: too heavy and couples the tool to the Obsidian ecosystem. `neo-tree.nvim` is excluded — navigation is Telescope-first and a file tree adds weight without supporting any designed workflow.
+Lean on existing NeoVim plugins for commodity features (markdown rendering, splash screen, plugin management, completion). Only write custom Lua for behaviour that has no suitable existing plugin — specifically the `:Totes` command and WikiLink navigation. `obsidian.nvim` is explicitly excluded: too heavy and couples the tool to the Obsidian ecosystem. `neo-tree.nvim` is excluded — navigation is Telescope-first and a file tree adds weight without supporting any designed workflow.
 
 Confirmed plugin selections:
 - `lazy.nvim` — plugin manager
 - `telescope.nvim` — fuzzy finder, WikiLink disambiguation, backlinks
 - `render-markdown.nvim` — markdown rendering
 - `nui.nvim` — custom UI components (used by `:Totes` command)
+- `blink.cmp` — completion engine, used with a custom WikiLink source for in-link autocomplete of note stems
 - `alpha-nvim` — splash screen with ASCII logo, random tagline from a fixed list, a live inbox note count (e.g. "3 unprocessed in inbox"), and a live open-task count derived from `- [ ]` lines in the Task Note (e.g. "5 open tasks"):
   - "Notes, by Todd"
   - "Lemme write that down"
@@ -111,9 +112,10 @@ A date-stamped note in `daily/` opened via `<leader>d`. One file per calendar da
 - Avoid: "journal", "log", "diary"
 
 ### WikiLink
-A link between notes written as `[[Note Name]]` or `[[Note Name|Alias]]`. Resolved by case-insensitive filename match across the entire Vault. Zero matches = offer to create the Note in `inbox/`. Multiple matches = Telescope picker. Alias syntax supported.
+A link between notes written as `[[filename-stem]]` or `[[filename-stem|Alias]]`. The canonical text inside the brackets is the kebab-case filename stem (without `.md`), matching the on-disk filename. Resolved by case-insensitive stem match across the entire Vault. Zero matches = offer to create the Note in `inbox/`. Multiple matches = Telescope picker. Alias syntax supported and is the mechanism for displaying human-readable text in prose.
 
 - Avoid: "internal link", "note link"
+- Autocompletion is provided by a custom `blink.cmp` source triggered inside `[[...`. Candidate scope: all Notes except Daily Notes (their date filenames make poor link targets and they pollute the picker as they accumulate). Daily Notes remain manually linkable and resolvable via `gf`. Filter matches against stem **and** title (so "rust" finds "my-thoughts-on-rust" titled "My Thoughts on Rust"), but only the stem is ever inserted — aliases are never auto-generated and remain a user-typed concern. Autocomplete does not surface a "create new note" option — creating a missing note is the responsibility of `gf`-create, which keeps a single creation surface.
 
 ### Task
 A markdown checkbox line (`- [ ] <text>`) stored in the Task Note. Tasks are plain text — no special frontmatter, no dedicated file per task. The user is responsible for embedding any relevant context (e.g. a WikiLink) directly in the task text. Tasks are added from any Note via `<leader>t` and collected in a single global Task Note.
