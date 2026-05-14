@@ -1,3 +1,5 @@
+local note_metadata = require("totes.note_metadata")
+
 local M = {}
 
 --- Decide whether completion should fire at `col` (0-based) on `line`.
@@ -20,7 +22,7 @@ local function is_under_daily(rel_path) return rel_path:sub(1, 6) == "daily/" en
 local function stem(rel_path) return (rel_path:match("([^/]+)%.md$")) end
 
 --- Scan the Vault and return WikiLink completion candidates.
--- Excludes Notes under `daily/`. Returns `{ { stem = "..." }, ... }`.
+-- Excludes Notes under `daily/`. Returns `{ { stem = "...", title = "..." | nil }, ... }`.
 function M.candidates(vault_root)
   local results = {}
   local handle = io.popen(string.format("find %q -name '*.md' -type f 2>/dev/null", vault_root))
@@ -33,7 +35,7 @@ function M.candidates(vault_root)
     if not is_under_daily(rel) then
       local s = stem(rel)
       if s then
-        results[#results + 1] = { stem = s }
+        results[#results + 1] = { stem = s, title = note_metadata.read_title(path) }
       end
     end
   end

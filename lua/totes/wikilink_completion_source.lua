@@ -15,8 +15,13 @@ function Source:get_trigger_characters() return { "[" } end
 local function to_items(candidates)
   local items = {}
   for _, c in ipairs(candidates) do
+    -- filterText spans stem + title so fuzzy-typing either fragment matches;
+    -- insertText stays stem-only per ADR-0004.
+    local filter_text = c.title and (c.stem .. " " .. c.title) or c.stem
     items[#items + 1] = {
       label = c.stem,
+      labelDetails = c.title and { description = c.title } or nil,
+      filterText = filter_text,
       insertText = c.stem,
       kind = vim.lsp.protocol.CompletionItemKind.File,
     }
