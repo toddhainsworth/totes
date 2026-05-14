@@ -4,7 +4,9 @@ local PARA_PREFIXES = { "project/", "area/", "resource/" }
 
 local function parse_tags(content)
   local fm = content:match("^%-%-%-\n(.-)%-%-%-\n")
-  if not fm then return {} end
+  if not fm then
+    return {}
+  end
 
   local tags = {}
   local in_tags = false
@@ -25,14 +27,18 @@ end
 
 local function is_para_tag(tag)
   for _, prefix in ipairs(PARA_PREFIXES) do
-    if tag:sub(1, #prefix) == prefix then return true end
+    if tag:sub(1, #prefix) == prefix then
+      return true
+    end
   end
   return false
 end
 
 function M.write_archive_tag(content, archive_tag)
   local fm, rest = content:match("^(%-%-%-\n.-)%-%-%-\n(.*)$")
-  if not fm then return content end
+  if not fm then
+    return content
+  end
 
   if fm:find("  - " .. archive_tag, 1, true) then
     return content
@@ -138,7 +144,9 @@ function M.archive()
       submit = { "<CR>" },
     },
     on_submit = function(item)
-      if item.text ~= "Yes" then return end
+      if item.text ~= "Yes" then
+        return
+      end
       local updated = M.write_archive_tag(content, archive_tag)
       if updated == content then
         vim.notify("totes: could not update frontmatter", vim.log.levels.ERROR)
@@ -160,8 +168,6 @@ function M.archive()
   menu:on(event.BufLeave, function() menu:unmount() end)
 end
 
-function M.setup()
-  vim.keymap.set("n", "<leader>a", M.archive, { desc = "Archive current note" })
-end
+function M.setup() vim.keymap.set("n", "<leader>a", M.archive, { desc = "Archive current note" }) end
 
 return M

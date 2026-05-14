@@ -7,7 +7,9 @@ local function add_nav_mappings(map)
 end
 
 function M.tag_matches(tag, prefix)
-  if prefix == "" then return true end
+  if prefix == "" then
+    return true
+  end
   local bare = prefix:match("^(.*)/+$") or prefix
   return tag == bare or tag:sub(1, #bare + 1) == bare .. "/"
 end
@@ -21,7 +23,9 @@ function M.find_notes()
   local action_state = require("telescope.actions.state")
 
   local handle = io.popen(string.format("find %q -name '*.md' -type f", vault.root))
-  if not handle then return end
+  if not handle then
+    return
+  end
   local entries = {}
   for path in handle:lines() do
     local f = io.open(path, "r")
@@ -40,25 +44,27 @@ function M.find_notes()
   end
   handle:close()
 
-  pickers.new({}, {
-    prompt_title = "Find Notes",
-    finder = finders.new_table({
-      results = entries,
-      entry_maker = function(e) return e end,
-    }),
-    sorter = conf.generic_sorter({}),
-    attach_mappings = function(buf, map)
-      add_nav_mappings(map)
-      actions.select_default:replace(function()
-        actions.close(buf)
-        local sel = action_state.get_selected_entry()
-        if sel then
-          vim.cmd("edit " .. vim.fn.fnameescape(sel.path))
-        end
-      end)
-      return true
-    end,
-  }):find()
+  pickers
+    .new({}, {
+      prompt_title = "Find Notes",
+      finder = finders.new_table({
+        results = entries,
+        entry_maker = function(e) return e end,
+      }),
+      sorter = conf.generic_sorter({}),
+      attach_mappings = function(buf, map)
+        add_nav_mappings(map)
+        actions.select_default:replace(function()
+          actions.close(buf)
+          local sel = action_state.get_selected_entry()
+          if sel then
+            vim.cmd("edit " .. vim.fn.fnameescape(sel.path))
+          end
+        end)
+        return true
+      end,
+    })
+    :find()
 end
 
 function M.open_notes_for_tag(prefix)
@@ -69,15 +75,17 @@ function M.open_notes_for_tag(prefix)
   local conf = require("telescope.config").values
 
   local matching = tag_scanner.notes_for_tag(vault.root, prefix)
-  pickers.new({}, {
-    prompt_title = "Notes tagged: " .. prefix,
-    finder = finders.new_table({ results = matching }),
-    sorter = conf.generic_sorter({}),
-    attach_mappings = function(_, map)
-      add_nav_mappings(map)
-      return true
-    end,
-  }):find()
+  pickers
+    .new({}, {
+      prompt_title = "Notes tagged: " .. prefix,
+      finder = finders.new_table({ results = matching }),
+      sorter = conf.generic_sorter({}),
+      attach_mappings = function(_, map)
+        add_nav_mappings(map)
+        return true
+      end,
+    })
+    :find()
 end
 
 function M.filter_by_tag()
@@ -91,21 +99,25 @@ function M.filter_by_tag()
 
   local tags = tag_scanner.scan(vault.root)
 
-  pickers.new({}, {
-    prompt_title = "Filter by Tag",
-    finder = finders.new_table({ results = tags }),
-    sorter = conf.generic_sorter({}),
-    attach_mappings = function(buf, map)
-      add_nav_mappings(map)
-      actions.select_default:replace(function()
-        actions.close(buf)
-        local selected = action_state.get_selected_entry()
-        if not selected then return end
-        M.open_notes_for_tag(selected.value)
-      end)
-      return true
-    end,
-  }):find()
+  pickers
+    .new({}, {
+      prompt_title = "Filter by Tag",
+      finder = finders.new_table({ results = tags }),
+      sorter = conf.generic_sorter({}),
+      attach_mappings = function(buf, map)
+        add_nav_mappings(map)
+        actions.select_default:replace(function()
+          actions.close(buf)
+          local selected = action_state.get_selected_entry()
+          if not selected then
+            return
+          end
+          M.open_notes_for_tag(selected.value)
+        end)
+        return true
+      end,
+    })
+    :find()
 end
 
 function M.backlinks()

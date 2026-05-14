@@ -4,7 +4,9 @@ local vault = require("totes.vault")
 
 function M.create_inbox_note(default_title)
   vim.ui.input({ prompt = "Note title: ", default = default_title or "" }, function(title)
-    if not title or title == "" then return end
+    if not title or title == "" then
+      return
+    end
 
     local note = note_factory.create(title, {})
 
@@ -28,8 +30,6 @@ function M.create_inbox_note(default_title)
   end)
 end
 
-function M.setup()
-  vim.keymap.set("n", "<leader>n", M.create_inbox_note, { desc = "New inbox note" })
-end
+function M.setup() vim.keymap.set("n", "<leader>n", M.create_inbox_note, { desc = "New inbox note" }) end
 
 return M

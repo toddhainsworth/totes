@@ -2,19 +2,21 @@ local M = {}
 
 local PROMPT = "tag: "
 
-function M.is_daily(filepath)
-  return filepath:find("/daily/", 1, true) ~= nil
-end
+function M.is_daily(filepath) return filepath:find("/daily/", 1, true) ~= nil end
 
 -- Returns content with tag appended to the frontmatter tags field.
 -- If tag is nil or empty, returns content unchanged.
 -- Handles both `tags: []` (empty list) and existing block sequence forms.
 -- Only applies changes within the frontmatter block to avoid false matches in the body.
 function M.update_frontmatter_tag(content, tag)
-  if not tag or tag == "" then return content end
+  if not tag or tag == "" then
+    return content
+  end
 
   local fm, rest = content:match("^(%-%-%-\n.-)%-%-%-\n(.*)$")
-  if not fm then return content end
+  if not fm then
+    return content
+  end
 
   -- Try replacing empty inline list form within frontmatter
   local new_fm, count = fm:gsub("tags: %[%]", "tags:\n  - " .. tag)
@@ -49,7 +51,9 @@ function M.update_frontmatter_tag(content, tag)
 end
 
 local function find_top_match(tags, value)
-  if value == "" then return nil end
+  if value == "" then
+    return nil
+  end
   for _, tag in ipairs(tags) do
     if tag:sub(1, #value) == value and tag ~= value then
       return tag
@@ -63,11 +67,15 @@ local function move_file(src, dest)
   if not ok then
     -- os.rename fails across devices; fall back to copy+delete
     local src_f = io.open(src, "rb")
-    if not src_f then return false, "cannot open source" end
+    if not src_f then
+      return false, "cannot open source"
+    end
     local data = src_f:read("*a")
     src_f:close()
     local dest_f = io.open(dest, "wb")
-    if not dest_f then return false, "cannot open destination" end
+    if not dest_f then
+      return false, "cannot open destination"
+    end
     dest_f:write(data)
     dest_f:close()
     os.remove(src)
@@ -106,10 +114,7 @@ function M.promote()
   local filepath = vim.fn.expand("%:p")
 
   if M.is_daily(filepath) then
-    vim.notify(
-      "Daily Notes cannot be promoted. Use \\n to create a new note.",
-      vim.log.levels.INFO
-    )
+    vim.notify("Daily Notes cannot be promoted. Use \\n to create a new note.", vim.log.levels.INFO)
     return
   end
 
@@ -139,12 +144,8 @@ function M.promote()
   }, {
     prompt = PROMPT,
     default_value = "",
-    on_change = function(value)
-      current_value = value
-    end,
-    on_submit = function(value)
-      perform_promotion(filepath, dest, value)
-    end,
+    on_change = function(value) current_value = value end,
+    on_submit = function(value) perform_promotion(filepath, dest, value) end,
   })
 
   input:mount()
@@ -154,7 +155,9 @@ function M.promote()
 
   input:map("i", "<Tab>", function()
     local match = find_top_match(tags, current_value)
-    if not match then return end
+    if not match then
+      return
+    end
     -- Replace the input line content after the prompt
     local buf = input.bufnr
     local line = vim.api.nvim_buf_get_lines(buf, 0, 1, false)[1] or ""
@@ -166,8 +169,6 @@ function M.promote()
   end, { noremap = true })
 end
 
-function M.setup()
-  vim.keymap.set("n", "<leader>p", M.promote, { desc = "Promote inbox note to notes/" })
-end
+function M.setup() vim.keymap.set("n", "<leader>p", M.promote, { desc = "Promote inbox note to notes/" }) end
 
 return M

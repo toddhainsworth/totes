@@ -3,15 +3,13 @@ local M = {}
 function M.slugify(title)
   local s = title or ""
   s = s:lower()
-  s = s:gsub("[^a-zA-Z0-9%s]", " ")  -- replace non-alphanumeric (ASCII) with space
-  s = s:gsub("%s+", "-")         -- collapse whitespace runs to a single hyphen
-  s = s:gsub("^%-+", ""):gsub("%-+$", "")  -- trim leading/trailing hyphens
+  s = s:gsub("[^a-zA-Z0-9%s]", " ") -- replace non-alphanumeric (ASCII) with space
+  s = s:gsub("%s+", "-") -- collapse whitespace runs to a single hyphen
+  s = s:gsub("^%-+", ""):gsub("%-+$", "") -- trim leading/trailing hyphens
   return s
 end
 
-function M.timestamp()
-  return os.date("!%Y-%m-%dT%H:%M:%SZ")
-end
+function M.timestamp() return os.date("!%Y-%m-%dT%H:%M:%SZ") end
 
 function M.frontmatter(title, tags)
   local tag_lines

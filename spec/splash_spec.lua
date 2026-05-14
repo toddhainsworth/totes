@@ -19,24 +19,16 @@ local function write(path, contents)
   f:close()
 end
 
-local function rmdir(path)
-  os.execute('rm -rf "' .. path .. '"')
-end
+local function rmdir(path) os.execute('rm -rf "' .. path .. '"') end
 
 describe("splash.count_inbox_notes", function()
   local dir
 
-  before_each(function()
-    dir = tmpdir()
-  end)
+  before_each(function() dir = tmpdir() end)
 
-  after_each(function()
-    rmdir(dir)
-  end)
+  after_each(function() rmdir(dir) end)
 
-  it("returns 0 for an empty inbox", function()
-    assert.equal(0, splash.count_inbox_notes(dir))
-  end)
+  it("returns 0 for an empty inbox", function() assert.equal(0, splash.count_inbox_notes(dir)) end)
 
   it("counts .md files directly in the inbox", function()
     touch(dir .. "/note-one.md")
@@ -66,17 +58,14 @@ end)
 describe("splash.count_open_tasks", function()
   local dir
 
-  before_each(function()
-    dir = tmpdir()
-  end)
+  before_each(function() dir = tmpdir() end)
 
-  after_each(function()
-    rmdir(dir)
-  end)
+  after_each(function() rmdir(dir) end)
 
-  it("returns 0 when the task note does not exist", function()
-    assert.equal(0, splash.count_open_tasks(dir .. "/missing.md"))
-  end)
+  it(
+    "returns 0 when the task note does not exist",
+    function() assert.equal(0, splash.count_open_tasks(dir .. "/missing.md")) end
+  )
 
   it("returns 0 for an empty task note", function()
     local path = dir .. "/tasks.md"
@@ -86,16 +75,19 @@ describe("splash.count_open_tasks", function()
 
   it("counts only lines starting with '- [ ]'", function()
     local path = dir .. "/tasks.md"
-    write(path, table.concat({
-      "---",
-      "title: 'Tasks'",
-      "---",
-      "- [ ] open one",
-      "- [x] done one",
-      "- [ ] open two",
-      "some prose",
-      "",
-    }, "\n"))
+    write(
+      path,
+      table.concat({
+        "---",
+        "title: 'Tasks'",
+        "---",
+        "- [ ] open one",
+        "- [x] done one",
+        "- [ ] open two",
+        "some prose",
+        "",
+      }, "\n")
+    )
     assert.equal(2, splash.count_open_tasks(path))
   end)
 

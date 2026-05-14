@@ -21,9 +21,7 @@ describe("autogit.parse_title", function()
     assert.equal("untitled", autogit.parse_title(content))
   end)
 
-  it("returns untitled for nil input", function()
-    assert.equal("untitled", autogit.parse_title(nil))
-  end)
+  it("returns untitled for nil input", function() assert.equal("untitled", autogit.parse_title(nil)) end)
 
   it("unescapes doubled single quotes in title", function()
     local content = "---\ntitle: 'Todd''s Note'\ntags: []\n---\n"

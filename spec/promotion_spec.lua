@@ -27,17 +27,20 @@ describe("promotion.promote Task Note guard", function()
 end)
 
 describe("promotion.is_daily", function()
-  it("returns true for a path inside daily/", function()
-    assert.is_true(promotion.is_daily("/home/user/totes/daily/2026-05-13.md"))
-  end)
+  it(
+    "returns true for a path inside daily/",
+    function() assert.is_true(promotion.is_daily("/home/user/totes/daily/2026-05-13.md")) end
+  )
 
-  it("returns false for a path inside inbox/", function()
-    assert.is_false(promotion.is_daily("/home/user/totes/inbox/my-note.md"))
-  end)
+  it(
+    "returns false for a path inside inbox/",
+    function() assert.is_false(promotion.is_daily("/home/user/totes/inbox/my-note.md")) end
+  )
 
-  it("returns false for a path inside notes/", function()
-    assert.is_false(promotion.is_daily("/home/user/totes/notes/my-note.md"))
-  end)
+  it(
+    "returns false for a path inside notes/",
+    function() assert.is_false(promotion.is_daily("/home/user/totes/notes/my-note.md")) end
+  )
 end)
 
 describe("promotion.update_frontmatter_tag", function()

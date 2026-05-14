@@ -11,7 +11,9 @@ function M.wikilink_at_cursor(line, col)
   local init = 1
   while true do
     local s, e = line:find("%[%[.-%]%]", init)
-    if not s then return nil end
+    if not s then
+      return nil
+    end
     if col >= s and col <= e then
       return line:sub(s, e)
     end
@@ -21,7 +23,9 @@ end
 
 local function collect_vault_files()
   local handle = io.popen(string.format("find %q -name '*.md' -type f 2>/dev/null", vault.root))
-  if not handle then return {} end
+  if not handle then
+    return {}
+  end
   local files = {}
   for line in handle:lines() do
     local rel = line:sub(#vault.root + 2)
@@ -42,21 +46,23 @@ local function open_telescope_picker(candidates)
   local actions = require("telescope.actions")
   local action_state = require("telescope.actions.state")
 
-  pickers.new({}, {
-    prompt_title = "WikiLink matches",
-    finder = finders.new_table({ results = candidates }),
-    sorter = conf.generic_sorter({}),
-    attach_mappings = function(buf, map)
-      actions.select_default:replace(function()
-        actions.close(buf)
-        local sel = action_state.get_selected_entry()
-        if sel then
-          vim.cmd("edit " .. vim.fn.fnameescape(vault.root .. "/" .. sel.value))
-        end
-      end)
-      return true
-    end,
-  }):find()
+  pickers
+    .new({}, {
+      prompt_title = "WikiLink matches",
+      finder = finders.new_table({ results = candidates }),
+      sorter = conf.generic_sorter({}),
+      attach_mappings = function(buf, map)
+        actions.select_default:replace(function()
+          actions.close(buf)
+          local sel = action_state.get_selected_entry()
+          if sel then
+            vim.cmd("edit " .. vim.fn.fnameescape(vault.root .. "/" .. sel.value))
+          end
+        end)
+        return true
+      end,
+    })
+    :find()
 end
 
 local function strip_wikilink(link)
@@ -65,15 +71,11 @@ local function strip_wikilink(link)
 end
 
 local function offer_create(link)
-  vim.ui.select(
-    { "Create note", "Cancel" },
-    { prompt = "No note found for '" .. link .. "'" },
-    function(choice)
-      if choice == "Create note" then
-        require("totes.notes").create_inbox_note(strip_wikilink(link))
-      end
+  vim.ui.select({ "Create note", "Cancel" }, { prompt = "No note found for '" .. link .. "'" }, function(choice)
+    if choice == "Create note" then
+      require("totes.notes").create_inbox_note(strip_wikilink(link))
     end
-  )
+  end)
 end
 
 --- Follow the WikiLink under the cursor, or fall back to default gf.
@@ -104,9 +106,7 @@ end
 function M.setup()
   vim.api.nvim_create_autocmd("FileType", {
     pattern = "markdown",
-    callback = function()
-      vim.keymap.set("n", "gf", M.follow, { buffer = true, desc = "Follow WikiLink" })
-    end,
+    callback = function() vim.keymap.set("n", "gf", M.follow, { buffer = true, desc = "Follow WikiLink" }) end,
   })
 end
 

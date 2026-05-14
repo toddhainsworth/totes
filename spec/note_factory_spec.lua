@@ -1,45 +1,31 @@
 local factory = require("totes.note_factory")
 
 describe("note_factory.slugify", function()
-  it("converts a normal title to kebab-case", function()
-    assert.equal("my-thoughts-on-rust", factory.slugify("My Thoughts on Rust"))
-  end)
+  it(
+    "converts a normal title to kebab-case",
+    function() assert.equal("my-thoughts-on-rust", factory.slugify("My Thoughts on Rust")) end
+  )
 
-  it("lowercases the result", function()
-    assert.equal("hello-world", factory.slugify("HELLO WORLD"))
-  end)
+  it("lowercases the result", function() assert.equal("hello-world", factory.slugify("HELLO WORLD")) end)
 
-  it("strips punctuation", function()
-    assert.equal("hello-world", factory.slugify("Hello, World!"))
-  end)
+  it("strips punctuation", function() assert.equal("hello-world", factory.slugify("Hello, World!")) end)
 
-  it("collapses consecutive spaces", function()
-    assert.equal("my-double-space", factory.slugify("My  Double  Space"))
-  end)
+  it(
+    "collapses consecutive spaces",
+    function() assert.equal("my-double-space", factory.slugify("My  Double  Space")) end
+  )
 
-  it("trims leading and trailing whitespace", function()
-    assert.equal("my-note", factory.slugify("  My Note  "))
-  end)
+  it("trims leading and trailing whitespace", function() assert.equal("my-note", factory.slugify("  My Note  ")) end)
 
-  it("handles numbers in titles", function()
-    assert.equal("note-42", factory.slugify("Note 42"))
-  end)
+  it("handles numbers in titles", function() assert.equal("note-42", factory.slugify("Note 42")) end)
 
-  it("returns empty string for empty input", function()
-    assert.equal("", factory.slugify(""))
-  end)
+  it("returns empty string for empty input", function() assert.equal("", factory.slugify("")) end)
 
-  it("returns empty string for whitespace-only input", function()
-    assert.equal("", factory.slugify("   "))
-  end)
+  it("returns empty string for whitespace-only input", function() assert.equal("", factory.slugify("   ")) end)
 
-  it("strips non-ASCII characters", function()
-    assert.equal("caf-notes", factory.slugify("Café Notes"))
-  end)
+  it("strips non-ASCII characters", function() assert.equal("caf-notes", factory.slugify("Café Notes")) end)
 
-  it("handles titles that are only special characters", function()
-    assert.equal("", factory.slugify("!!!"))
-  end)
+  it("handles titles that are only special characters", function() assert.equal("", factory.slugify("!!!")) end)
 end)
 
 describe("note_factory.timestamp", function()

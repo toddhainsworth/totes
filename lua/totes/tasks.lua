@@ -12,9 +12,7 @@ local function build_frontmatter()
   return note_factory.frontmatter("Tasks", {})
 end
 
-function M.is_task_note(filepath)
-  return filepath == M.path()
-end
+function M.is_task_note(filepath) return filepath == M.path() end
 
 function M.append(text)
   local path = M.path()
@@ -41,9 +39,7 @@ function M.append(text)
   return true
 end
 
-function M.open()
-  vim.cmd("edit " .. vim.fn.fnameescape(M.path()))
-end
+function M.open() vim.cmd("edit " .. vim.fn.fnameescape(M.path())) end
 
 function M.add()
   local Input = require("nui.input")
@@ -59,7 +55,9 @@ function M.add()
     prompt = "> ",
     default_value = "",
     on_submit = function(value)
-      if not value or value == "" then return end
+      if not value or value == "" then
+        return
+      end
       local ok, err = M.append(value)
       if ok then
         vim.notify("totes: task added", vim.log.levels.INFO)

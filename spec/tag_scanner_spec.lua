@@ -13,9 +13,7 @@ local function write_note(dir, name, content)
   f:close()
 end
 
-local function rmdir(path)
-  os.execute('rm -rf "' .. path .. '"')
-end
+local function rmdir(path) os.execute('rm -rf "' .. path .. '"') end
 
 describe("tag_scanner.parse_tags", function()
   it("returns a single tag from frontmatter", function()
@@ -24,7 +22,8 @@ describe("tag_scanner.parse_tags", function()
   end)
 
   it("returns multiple tags from frontmatter", function()
-    local content = "---\ntitle: 'My Note'\ntags:\n  - project/totes\n  - area/health\ncreated: 2026-01-01T00:00:00Z\n---\n"
+    local content =
+      "---\ntitle: 'My Note'\ntags:\n  - project/totes\n  - area/health\ncreated: 2026-01-01T00:00:00Z\n---\n"
     assert.same({ "project/totes", "area/health" }, scanner.parse_tags(content))
   end)
 
@@ -52,13 +51,9 @@ end)
 describe("tag_scanner.scan", function()
   local dir
 
-  before_each(function()
-    dir = tmpdir()
-  end)
+  before_each(function() dir = tmpdir() end)
 
-  after_each(function()
-    rmdir(dir)
-  end)
+  after_each(function() rmdir(dir) end)
 
   it("returns tags from a single file", function()
     write_note(dir, "one.md", "---\ntags:\n  - project/totes\n---\n")
@@ -80,13 +75,9 @@ end)
 describe("tag_scanner.notes_for_tag", function()
   local dir
 
-  before_each(function()
-    dir = tmpdir()
-  end)
+  before_each(function() dir = tmpdir() end)
 
-  after_each(function()
-    rmdir(dir)
-  end)
+  after_each(function() rmdir(dir) end)
 
   it("returns files whose tags match an exact prefix", function()
     write_note(dir, "a.md", "---\ntags:\n  - project/totes\n---\n")

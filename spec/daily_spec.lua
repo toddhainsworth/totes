@@ -32,9 +32,7 @@ describe("daily.open (new file)", function()
     os.execute("mkdir -p " .. daily_dir)
   end)
 
-  after_each(function()
-    os.execute("rm -rf " .. daily_dir)
-  end)
+  after_each(function() os.execute("rm -rf " .. daily_dir) end)
 
   it("creates a daily note with a daily tag and a date heading", function()
     daily.open()

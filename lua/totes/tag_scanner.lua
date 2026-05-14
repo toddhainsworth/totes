@@ -25,12 +25,16 @@ end
 
 function M.parse_tags(content)
   local fm = extract_frontmatter(content)
-  if not fm then return {} end
+  if not fm then
+    return {}
+  end
   return parse_yaml_tags(fm)
 end
 
 local function prefix_matches(tag, prefix)
-  if prefix == "" then return true end
+  if prefix == "" then
+    return true
+  end
   local bare = prefix:match("^(.*)/+$") or prefix
   return tag == bare or tag:sub(1, #bare + 1) == bare .. "/"
 end
@@ -38,7 +42,9 @@ end
 function M.notes_for_tag(vault_path, prefix)
   local results = {}
   local handle = io.popen(string.format("find %q -name '*.md' -type f", vault_path))
-  if not handle then return results end
+  if not handle then
+    return results
+  end
   for path in handle:lines() do
     local f = io.open(path, "r")
     if f then
@@ -61,7 +67,9 @@ function M.scan(vault_path)
   local result = {}
 
   local handle = io.popen(string.format("find %q -name '*.md' -type f", vault_path))
-  if not handle then return result end
+  if not handle then
+    return result
+  end
 
   for path in handle:lines() do
     local f = io.open(path, "r")

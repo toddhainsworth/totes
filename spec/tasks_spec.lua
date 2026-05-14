@@ -8,30 +8,27 @@ package.loaded["totes.vault"] = { root = FAKE_ROOT }
 
 local tasks = require("totes.tasks")
 
-local function task_note_path(root)
-  return (root or FAKE_ROOT) .. "/notes/tasks.md"
-end
+local function task_note_path(root) return (root or FAKE_ROOT) .. "/notes/tasks.md" end
 
 local function read_file(path)
   local f = io.open(path, "r")
-  if not f then return nil end
+  if not f then
+    return nil
+  end
   local content = f:read("*a")
   f:close()
   return content
 end
 
-local function setup_notes_dir(root)
-  os.execute("mkdir -p " .. (root or FAKE_ROOT) .. "/notes")
-end
+local function setup_notes_dir(root) os.execute("mkdir -p " .. (root or FAKE_ROOT) .. "/notes") end
 
-local function teardown_notes_dir(root)
-  os.execute("rm -rf " .. (root or FAKE_ROOT) .. "/notes")
-end
+local function teardown_notes_dir(root) os.execute("rm -rf " .. (root or FAKE_ROOT) .. "/notes") end
 
 describe("tasks.is_task_note", function()
-  it("returns true for the vault task note path", function()
-    assert.is_true(tasks.is_task_note(FAKE_ROOT .. "/notes/tasks.md"))
-  end)
+  it(
+    "returns true for the vault task note path",
+    function() assert.is_true(tasks.is_task_note(FAKE_ROOT .. "/notes/tasks.md")) end
+  )
 
   it("returns false for any other path", function()
     assert.is_false(tasks.is_task_note(FAKE_ROOT .. "/notes/other.md"))
@@ -40,13 +37,9 @@ describe("tasks.is_task_note", function()
 end)
 
 describe("tasks.append", function()
-  before_each(function()
-    setup_notes_dir()
-  end)
+  before_each(function() setup_notes_dir() end)
 
-  after_each(function()
-    teardown_notes_dir()
-  end)
+  after_each(function() teardown_notes_dir() end)
 
   it("creates the file with frontmatter and appends the task on first call", function()
     local ok, err = tasks.append("buy milk")

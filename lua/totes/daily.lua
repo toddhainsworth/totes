@@ -3,9 +3,7 @@ local M = {}
 local vault = require("totes.vault")
 local note_factory = require("totes.note_factory")
 
-function M.today_date()
-  return os.date("%Y-%m-%d")
-end
+function M.today_date() return os.date("%Y-%m-%d") end
 
 function M.open()
   local date = M.today_date()
@@ -29,8 +27,6 @@ function M.open()
   vim.cmd("edit " .. vim.fn.fnameescape(daily_path))
 end
 
-function M.setup()
-  vim.keymap.set("n", "<leader>d", M.open, { desc = "Open daily note" })
-end
+function M.setup() vim.keymap.set("n", "<leader>d", M.open, { desc = "Open daily note" }) end
 
 return M

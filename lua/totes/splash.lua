@@ -18,10 +18,10 @@ local logo = {
 }
 
 function M.count_inbox_notes(inbox_path)
-  local handle = io.popen(
-    string.format("find %q -maxdepth 1 -name '*.md' -type f", inbox_path)
-  )
-  if not handle then return 0 end
+  local handle = io.popen(string.format("find %q -maxdepth 1 -name '*.md' -type f", inbox_path))
+  if not handle then
+    return 0
+  end
 
   local count = 0
   for _ in handle:lines() do
@@ -34,7 +34,9 @@ end
 
 function M.count_open_tasks(task_note_path)
   local f = io.open(task_note_path, "r")
-  if not f then return 0 end
+  if not f then
+    return 0
+  end
 
   local count = 0
   for line in f:lines() do
@@ -47,9 +49,7 @@ function M.count_open_tasks(task_note_path)
   return count
 end
 
-local function random_tagline()
-  return taglines[math.random(#taglines)]
-end
+local function random_tagline() return taglines[math.random(#taglines)] end
 
 local function build_config(inbox_count, task_count)
   local tagline = random_tagline()
