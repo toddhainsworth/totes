@@ -48,6 +48,22 @@ require("lazy").setup({
   },
   { "MunifTanjim/nui.nvim" },
   { "goolord/alpha-nvim" },
+  {
+    "saghen/blink.cmp",
+    version = "*",
+    event = "InsertEnter",
+    opts = {
+      sources = {
+        default = { "totes_wikilink" },
+        providers = {
+          totes_wikilink = {
+            name = "WikiLink",
+            module = "totes.wikilink_completion_source",
+          },
+        },
+      },
+    },
+  },
 }, {
   root = vim.fn.stdpath("data") .. "/lazy",
 })
