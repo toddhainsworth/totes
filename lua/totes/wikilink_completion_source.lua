@@ -1,4 +1,5 @@
 local completion = require("totes.wikilink_completion")
+local wikilink_candidates = require("totes.wikilink_candidates")
 local vault = require("totes.vault")
 
 --- blink.cmp custom source: WikiLink stem autocomplete inside `[[...`.
@@ -36,7 +37,7 @@ function Source:get_completions(ctx, callback)
     callback({ is_incomplete_forward = false, is_incomplete_backward = false, items = {} })
     return
   end
-  local items = to_items(completion.candidates(vault.root))
+  local items = to_items(wikilink_candidates.collect(vault.root))
   callback({ is_incomplete_forward = false, is_incomplete_backward = false, items = items })
 end
 

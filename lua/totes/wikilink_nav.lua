@@ -22,17 +22,13 @@ function M.wikilink_at_cursor(line, col)
 end
 
 local function collect_vault_files()
-  local handle = io.popen(string.format("find %q -name '*.md' -type f 2>/dev/null", vault.root))
-  if not handle then
-    return {}
+  local prefix_len = #vault.root + 2
+  local absolute = vault.scan_markdown(vault.root)
+  local relative = {}
+  for _, path in ipairs(absolute) do
+    relative[#relative + 1] = path:sub(prefix_len)
   end
-  local files = {}
-  for line in handle:lines() do
-    local rel = line:sub(#vault.root + 2)
-    files[#files + 1] = rel
-  end
-  handle:close()
-  return files
+  return relative
 end
 
 local function open_telescope_picker(candidates)

@@ -24,4 +24,19 @@ end
 
 M.root = vault
 
+--- List every `*.md` file under `root`, returning absolute paths.
+-- Unfiltered: callers apply Daily exclusion / other policy on top.
+function M.scan_markdown(root)
+  local handle = io.popen(string.format("find %q -name '*.md' -type f 2>/dev/null", root))
+  if not handle then
+    return {}
+  end
+  local files = {}
+  for path in handle:lines() do
+    files[#files + 1] = path
+  end
+  handle:close()
+  return files
+end
+
 return M
