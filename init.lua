@@ -54,7 +54,7 @@ require("lazy").setup({
     event = "InsertEnter",
     opts = {
       sources = {
-        default = { "totes_wikilink" },
+        default = { "totes_wikilink", "buffer" },
         providers = {
           totes_wikilink = {
             name = "WikiLink",
