@@ -39,4 +39,11 @@ function M.scan_markdown(root)
   return files
 end
 
+--- Strip the Vault `root` prefix from an absolute path.
+-- Tolerates a trailing slash on `root` so callers don't have to normalize.
+function M.to_relative(root, absolute_path)
+  local clean = root:gsub("/$", "")
+  return absolute_path:sub(#clean + 2)
+end
+
 return M

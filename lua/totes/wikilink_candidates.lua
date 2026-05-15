@@ -12,9 +12,8 @@ local function stem(rel_path) return (rel_path:match("([^/]+)%.md$")) end
 -- the frontmatter title (or nil), and the absolute file path.
 function M.collect(vault_root)
   local results = {}
-  local prefix_len = #vault_root + 2
   for _, path in ipairs(vault.scan_markdown(vault_root)) do
-    local rel = path:sub(prefix_len)
+    local rel = vault.to_relative(vault_root, path)
     if not is_under_daily(rel) then
       local s = stem(rel)
       if s then

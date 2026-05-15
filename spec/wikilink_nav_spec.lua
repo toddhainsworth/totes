@@ -1,10 +1,5 @@
--- Stub vim and vault before loading wikilink_nav, as vault calls vim.fn at load time.
-vim = vim or {}
-vim.fn = vim.fn or { expand = function(p) return p end }
-
-package.loaded["totes.vault"] = { root = "/tmp/totes-test" }
-package.loaded["totes.wikilink_resolver"] = require("totes.wikilink_resolver")
-
+require("support.vim_stub")
+local vault = require("totes.vault")
 local nav = require("totes.wikilink_nav")
 
 describe("wikilink_nav.wikilink_at_cursor", function()
@@ -51,5 +46,33 @@ describe("wikilink_nav.wikilink_at_cursor", function()
   it("returns nil for an empty line", function()
     local result = nav.wikilink_at_cursor("", 1)
     assert.is_nil(result)
+  end)
+end)
+
+describe("wikilink_nav.collect_vault_files", function()
+  local original_scan = vault.scan_markdown
+  local original_root = vault.root
+
+  after_each(function()
+    vault.scan_markdown = original_scan
+    vault.root = original_root
+  end)
+
+  it("returns paths relative to vault.root (no leading slash)", function()
+    vault.root = "/tmp/totes-test"
+    vault.scan_markdown = function() return { "/tmp/totes-test/notes/foo.md", "/tmp/totes-test/inbox/bar.md" } end
+    assert.same({ "notes/foo.md", "inbox/bar.md" }, nav.collect_vault_files())
+  end)
+
+  it("tolerates a trailing slash on vault.root", function()
+    vault.root = "/tmp/totes-test/"
+    vault.scan_markdown = function() return { "/tmp/totes-test/notes/foo.md" } end
+    assert.same({ "notes/foo.md" }, nav.collect_vault_files())
+  end)
+
+  it("returns an empty list when the scanner finds nothing", function()
+    vault.root = "/tmp/totes-test"
+    vault.scan_markdown = function() return {} end
+    assert.same({}, nav.collect_vault_files())
   end)
 end)

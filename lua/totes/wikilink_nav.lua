@@ -21,12 +21,12 @@ function M.wikilink_at_cursor(line, col)
   end
 end
 
-local function collect_vault_files()
-  local prefix_len = #vault.root + 2
-  local absolute = vault.scan_markdown(vault.root)
+--- Return the Vault's `*.md` files as paths relative to `vault.root`.
+-- Public so the relative-path contract (consumed by wikilink_resolver) is testable.
+function M.collect_vault_files()
   local relative = {}
-  for _, path in ipairs(absolute) do
-    relative[#relative + 1] = path:sub(prefix_len)
+  for _, path in ipairs(vault.scan_markdown(vault.root)) do
+    relative[#relative + 1] = vault.to_relative(vault.root, path)
   end
   return relative
 end
@@ -86,7 +86,7 @@ function M.follow()
     return
   end
 
-  local files = collect_vault_files()
+  local files = M.collect_vault_files()
   local result = resolver.resolve(link, files)
 
   if result.kind == "one" then
