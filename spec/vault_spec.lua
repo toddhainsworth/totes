@@ -40,6 +40,23 @@ describe("vault.scan_markdown", function()
     assert.equals(1, #result)
     assert.equals(dir .. "/notes/keep.md", result[1])
   end)
+
+  it("scans Vaults whose path contains shell metacharacters", function()
+    local raw = os.tmpname() .. "_dol$lar"
+    os.remove(raw)
+    -- single-quoted shell so the metacharacter survives setup; if scan_markdown
+    -- shells out without proper quoting, $lar gets expanded to empty and the
+    -- file is invisible to it.
+    os.execute("mkdir -p '" .. raw .. "/inbox'")
+    local f = assert(io.open(raw .. "/inbox/note.md", "w"))
+    f:close()
+
+    local result = vault.scan_markdown(raw)
+
+    os.execute("rm -rf '" .. raw .. "'")
+    assert.equals(1, #result)
+    assert.equals(raw .. "/inbox/note.md", result[1])
+  end)
 end)
 
 describe("vault.to_relative", function()
