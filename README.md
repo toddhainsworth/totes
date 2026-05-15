@@ -65,11 +65,17 @@ Leader key is `\`.
 
 ### WikiLinks
 
-Write links as `[[Note Name]]` or `[[Note Name|Alias]]`. Following a link:
+Write links as `[[note-stem]]` — the canonical bracket contents are the kebab-case filename stem (without `.md`), e.g. `[[my-thoughts-on-rust]]`. For human-readable display in prose, use alias syntax: `[[my-thoughts-on-rust|My Thoughts on Rust]]`.
+
+Following a link with `gf`:
 
 - **One match** — opens the note directly
 - **Multiple matches** — opens a Telescope picker
 - **No match** — offers to create the note in `inbox/`
+
+Autocomplete fires automatically as you type inside `[[`. The popup shows both the stem and the note's `title` frontmatter, and fuzzy-matching spans both (so typing `rust` finds `my-thoughts-on-rust` titled "My Thoughts on Rust"). Only the stem is inserted — aliases stay a deliberate, user-typed concern.
+
+Daily Notes are excluded from autocomplete suggestions (their date filenames make poor link targets), but they remain linkable by hand and resolvable via `gf`.
 
 ## Note frontmatter
 
@@ -88,7 +94,7 @@ Tags follow a two-level hierarchical kebab-case convention: `project/totes`, `ar
 
 ## Tasks
 
-Tasks live in a single Task Note at `notes/tasks.md`. Each task is appended as a Markdown list item when you use `<leader>t`. You can embed `[[WikiLinks]]` in task text to link tasks to related notes.
+Tasks live in a single Task Note at `notes/tasks.md`. Each task is appended as a Markdown list item when you use `<leader>t`. You can embed WikiLinks (e.g. `[[my-thoughts-on-rust]]`) in task text to link tasks to related notes.
 
 The Task Note is created automatically the first time you add a task or open it with `<leader>T`. It cannot be promoted or archived.
 

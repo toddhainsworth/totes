@@ -21,18 +21,14 @@ function M.wikilink_at_cursor(line, col)
   end
 end
 
-local function collect_vault_files()
-  local handle = io.popen(string.format("find %q -name '*.md' -type f 2>/dev/null", vault.root))
-  if not handle then
-    return {}
+--- Return the Vault's `*.md` files as paths relative to `vault.root`.
+-- Public so the relative-path contract (consumed by wikilink_resolver) is testable.
+function M.collect_vault_files()
+  local relative = {}
+  for _, path in ipairs(vault.scan_markdown(vault.root)) do
+    relative[#relative + 1] = vault.to_relative(vault.root, path)
   end
-  local files = {}
-  for line in handle:lines() do
-    local rel = line:sub(#vault.root + 2)
-    files[#files + 1] = rel
-  end
-  handle:close()
-  return files
+  return relative
 end
 
 local function open_telescope_picker(candidates)
@@ -90,7 +86,7 @@ function M.follow()
     return
   end
 
-  local files = collect_vault_files()
+  local files = M.collect_vault_files()
   local result = resolver.resolve(link, files)
 
   if result.kind == "one" then
