@@ -53,6 +53,7 @@ require("lazy").setup({
     version = "*",
     event = "InsertEnter",
     opts = {
+      keymap = { preset = "super-tab" },
       sources = {
         default = { "totes_wikilink", "buffer" },
         providers = {
