@@ -55,8 +55,10 @@ Leader key: `\` (backslash). Set explicitly in the totes config; the user's pers
 - `<leader>b` — show backlinks (Telescope picker, greps vault for `[[Current Note Name]]`)
 - `gf` — follow WikiLink under cursor (broken link offers to create; ambiguous opens picker)
 - `<leader>a` — archive current note. Asks for yes/no confirmation. On confirm, embeds the original full PARA tag under `archive/` (e.g. `project/totes` → `archive/project/totes`). If the note has no PARA tag, falls back to `archive/<filename-stem>`. Blocked on Daily Notes — shows a notice and does nothing.
+- `<leader>D` — discard current Inbox Note (hard delete from disk). Asks for yes/no confirmation; defaults to No. Recovery is via the Vault's autogit history. Inbox-only — shows a notice and does nothing on Permanent Notes (directing the user to `<leader>a` archive instead), Daily Notes, and the Task Note.
 - `<leader>t` — add a Task (prompts for text and appends `- [ ] <text>` to the Task Note)
 - `<leader>T` — open the Task Note (`notes/tasks.md`)
+- `<leader>x` — on a task line (`- [ ]` or `- [x]`), toggle the checkbox state. No-op on non-task lines.
 - `<C-o>` — navigate back (standard Vim jumplist)
 - `jj` (insert) — exit insert mode (mapped to `<Esc>`)
 
@@ -99,7 +101,12 @@ A markdown file in the Vault. Has three required frontmatter fields, all auto-po
 - Avoid: "document", "file", "page", "entry"
 
 ### Inbox Note
-A Note in `inbox/` — fleeting, unrefined, not yet processed. Promoted to `notes/` via a confirm prompt. No frontmatter changes on promotion.
+A Note in `inbox/` — fleeting, unrefined, not yet processed. Has three triage outcomes: **promote** to `notes/` (`<leader>p`), **archive** in place by retagging (`<leader>a`), or **discard** as a hard delete (`<leader>D`). No frontmatter changes on promotion.
+
+### Discard
+The triage outcome for an Inbox Note that was not worth keeping. Hard-deletes the file from disk after a yes/no confirmation. Recovery is via the Vault's autogit history (local-only). Distinct from archive — archive preserves a note that's been deemed valuable but inactive; discard removes one that never earned that status. Discard is inbox-only; Permanent Notes use archive, Daily Notes and the Task Note are not discardable.
+
+- Avoid: "delete", "trash", "drop"
 
 ### Permanent Note
 A Note in `notes/` — processed and refined. Promoted from an Inbox Note via explicit command with confirmation.

@@ -52,6 +52,7 @@ Leader key is `\`.
 |-----|--------|
 | `<leader>t` | Add a Task to the Task Note (prompts for task text) |
 | `<leader>T` | Open the Task Note (`notes/tasks.md`) |
+| `<leader>x` | Toggle the checkbox state on a task line (`- [ ]` ↔ `- [x]`) |
 
 ### Navigation
 
