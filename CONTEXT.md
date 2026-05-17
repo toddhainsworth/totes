@@ -49,13 +49,13 @@ Leader key: `\` (backslash). Set explicitly in the totes config; the user's pers
 
 - `<leader>n` — create new Note (prompts for title, lands in `inbox/`)
 - `<leader>d` — open today's Daily Note in `daily/` (creates it if it doesn't exist, filename: `YYYY-MM-DD.md`)
-- `<leader>p` — promote current Inbox Note to `notes/`. Opens a single `nui.nvim` popup: heading shows the target path, optional PARA tag input with live autocomplete hints (sourced from existing vault tags, Tab accepts top suggestion), Enter confirms and promotes (tag is optional). Blocked on Daily Notes — shows a notice directing the user to `<leader>n` instead
+- `<leader>p` — promote current Inbox Note to `notes/`. Prompts for an optional PARA tag with live autocomplete hints sourced from existing vault tags (Tab accepts top suggestion); Enter confirms and promotes (tag is optional). Blocked on Daily Notes — shows a notice directing the user to `<leader>n` instead
 - `<leader>ff` — fuzzy find notes by filename/title
 - `<leader>ft` — filter by tag, then list matching notes. Supports prefix matching for hierarchical tags (e.g. `project/` returns all notes under any project)
 - `<leader>b` — show backlinks (Telescope picker, greps vault for `[[Current Note Name]]`)
 - `gf` — follow WikiLink under cursor (broken link offers to create; ambiguous opens picker)
-- `<leader>a` — archive current note. Opens a `nui.nvim` yes/no confirmation menu (arrow keys or Enter/Escape). On confirm, embeds the original full PARA tag under `archive/` (e.g. `project/totes` → `archive/project/totes`). If the note has no PARA tag, falls back to `archive/<filename-stem>`. Blocked on Daily Notes — shows a notice and does nothing.
-- `<leader>t` — add a Task (prompts for text via `nui.nvim`, appends `- [ ] <text>` to the Task Note)
+- `<leader>a` — archive current note. Asks for yes/no confirmation. On confirm, embeds the original full PARA tag under `archive/` (e.g. `project/totes` → `archive/project/totes`). If the note has no PARA tag, falls back to `archive/<filename-stem>`. Blocked on Daily Notes — shows a notice and does nothing.
+- `<leader>t` — add a Task (prompts for text and appends `- [ ] <text>` to the Task Note)
 - `<leader>T` — open the Task Note (`notes/tasks.md`)
 - `<C-o>` — navigate back (standard Vim jumplist)
 - `jj` (insert) — exit insert mode (mapped to `<Esc>`)
